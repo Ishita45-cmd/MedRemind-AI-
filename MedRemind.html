@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedRemind</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#F0FDF4;
+color:#14532D;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(135deg,#16A34A,#15803D);
+color:white;
+padding:25px;
+text-align:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.logo-section{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.logo{
+width:90px;
+height:90px;
+border-radius:50%;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:45px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.header-text h1{
+font-size:38px;
+}
+
+.header-text p{
+margin-top:5px;
+font-size:18px;
+}
+
+/* HERO IMAGE */
+
+.hero{
+padding:20px;
+text-align:center;
+}
+
+.hero img{
+width:100%;
+max-height:350px;
+object-fit:cover;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
+
+/* CONTAINER */
+
+.container{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h2{
+margin-bottom:15px;
+color:#16A34A;
+}
+
+input,select,textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#16A34A;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+transition:0.3s;
+}
+
+button:hover{
+background:#15803D;
+}
+
+#chatBox{
+height:250px;
+overflow-y:auto;
+border:1px solid #ddd;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+background:#F9FFFB;
+}
+
+.progress{
+height:20px;
+background:#DCFCE7;
+border-radius:10px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-bar{
+height:100%;
+width:75%;
+background:#16A34A;
+}
+
+.doctor-card{
+background:#DCFCE7;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+}
+
+#mentalResult{
+margin-top:15px;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo-section">
+
+<div class="logo">
+💚
+</div>
+
+<div class="header-text">
+<h1>MedRemind</h1>
+<p>Smart Healthcare Assistance Application</p>
+</div>
+
+</div>
+
+</header>
+
+<!-- HERO SECTION -->
+
+<div class="hero">
+
+<img 
+src="https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=1400&auto=format&fit=crop"
+alt="Healthcare Professional Banner"
+>
+
+</div>
+
+<div class="container">
+
+<!-- Medicine Reminder -->
+
+<div class="card">
+
+<h2>Medicine Reminder</h2>
+
+<input type="text" id="medicine" placeholder="Medicine Name">
+
+<input type="time" id="time">
+
+<button onclick="setReminder()">Set Reminder</button>
+
+<p id="reminderText"></p>
+
+</div>
+
+<!-- Consultation Reminder -->
+
+<div class="card">
+
+<h2>Doctor Consultation Reminder</h2>
+
+<input type="date" id="consultDate">
+
+<button onclick="saveConsultation()">Save Date</button>
+
+<p id="consultText"></p>
+
+</div>
+
+<!-- Disease Planner -->
+
+<div class="card">
+
+<h2>Disease & Diet Planner</h2>
+
+<select id="diseaseSelect" size="10"></select>
+
+<button onclick="showDiet()">Show Diet Plan</button>
+
+<div id="dietResult"></div>
+
+</div>
+
+<!-- Scanner -->
+
+<div class="card">
+
+<h2>Prescription Scanner</h2>
+
+<input type="file">
+
+<p>Upload prescription image</p>
+
+</div>
+
+<!-- Progress -->
+
+<div class="card">
+
+<h2>Progress Tracker</h2>
+
+<p>Medicine Completion</p>
+
+<div class="progress">
+<div class="progress-bar"></div>
+</div>
+
+</div>
+
+<!-- Edit Details -->
+
+<div class="card">
+
+<h2>Edit Medicine Details</h2>
+
+<input type="text" id="editMedicine" placeholder="Edit Medicine Name">
+
+<input type="text" id="editDosage" placeholder="Edit Dosage">
+
+<button onclick="editMedicineDetails()">Save Changes</button>
+
+<p id="editResult"></p>
+
+</div>
+
+<!-- Prescription History -->
+
+<div class="card">
+
+<h2>Prescription History</h2>
+
+<ul id="historyList">
+
+<li>Diabetes Prescription - Jan 2026</li>
+<li>Heart Medicine - Feb 2026</li>
+<li>BP Consultation - March 2026</li>
+
+</ul>
+
+</div>
+
+<!-- Psychological Test -->
+
+<div class="card">
+
+<h2>Psychological Health Test</h2>
+
+<p>1. Do you feel stressed frequently?</p>
+
+<select id="q1">
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select>
+
+<p>2. Do you feel anxious in public?</p>
+
+<select id="q2">
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select>
+
+<p>3. Do you face sleep issues?</p>
+
+<select id="q3">
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select>
+
+<p>4. Do you feel low or depressed?</p>
+
+<select id="q4">
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select>
+
+<button onclick="checkMentalHealth()">Check Result</button>
+
+<div id="mentalResult"></div>
+
+</div>
+
+<!-- Doctor Consultation -->
+
+<div class="card">
+
+<h2>Online Doctor Consultation</h2>
+
+<div class="doctor-card">
+<h3>General Physician</h3>
+<p>Treats fever, infections, cold, cough and general health problems.</p>
+</div>
+
+<div class="doctor-card">
+<h3>Cardiologist</h3>
+<p>Heart specialist for BP, chest pain and heart diseases.</p>
+</div>
+
+<div class="doctor-card">
+<h3>Psychologist</h3>
+<p>Mental health specialist for stress, anxiety and depression.</p>
+</div>
+
+<div class="doctor-card">
+<h3>Dermatologist</h3>
+<p>Skin specialist for acne, allergies and skin disorders.</p>
+</div>
+
+<div class="doctor-card">
+<h3>Neurologist</h3>
+<p>Brain and nerve specialist for migraine and nerve disorders.</p>
+</div>
+
+<select id="doctorType">
+
+<option>General Physician</option>
+<option>Cardiologist</option>
+<option>Psychologist</option>
+<option>Dermatologist</option>
+<option>Neurologist</option>
+
+</select>
+
+<button onclick="startDoctorChat()">Chat with Doctor</button>
+
+<button onclick="startVoiceCall()">Voice Call</button>
+
+<button onclick="startVideoCall()">Video Call</button>
+
+<div id="doctorResponse"></div>
+
+</div>
+
+<!-- AI Assistant -->
+
+<div class="card">
+
+<h2>AI Assistant</h2>
+
+<div id="chatBox"></div>
+
+<input type="text" id="userMessage" placeholder="Ask AI anything...">
+
+<button onclick="askAI()">Send</button>
+
+<button onclick="startVoice()">🎤 Speak</button>
+
+</div>
+
+</div>
+
+<script>
+
+const diseases=[];
+
+for(let i=1;i<=500;i++){
+diseases.push("Disease "+i);
+}
+
+const commonDiseases=[
+"Diabetes",
+"Hypertension",
+"Asthma",
+"Cancer",
+"COVID-19",
+"Heart Disease",
+"Stroke",
+"Kidney Disease",
+"Liver Disease",
+"Depression",
+"Anxiety",
+"Malaria",
+"Dengue",
+"Thyroid",
+"Arthritis",
+"Pneumonia",
+"Migraine",
+"Obesity",
+"Tuberculosis",
+"Skin Allergy"
+];
+
+const diseaseSelect=document.getElementById('diseaseSelect');
+
+commonDiseases.forEach(disease=>{
+const option=document.createElement('option');
+option.text=disease;
+diseaseSelect.add(option);
+});
+
+diseases.forEach(disease=>{
+const option=document.createElement('option');
+option.text=disease;
+diseaseSelect.add(option);
+});
+
+function setReminder(){
+
+const medicine=document.getElementById('medicine').value;
+
+const time=document.getElementById('time').value;
+
+localStorage.setItem('medicine',medicine);
+
+localStorage.setItem('time',time);
+
+document.getElementById('reminderText').innerHTML=
+`Reminder set for ${medicine} at ${time}`;
+
+alert('Medicine Reminder Saved');
+
+}
+
+function saveConsultation(){
+
+const date=document.getElementById('consultDate').value;
+
+document.getElementById('consultText').innerHTML=
+`Next consultation on ${date}`;
+
+}
+
+function showDiet(){
+
+const disease=document.getElementById('diseaseSelect').value;
+
+let result=`
+<h3>Selected Disease:</h3>
+<p>${disease}</p>
+
+<h3>Common Symptoms</h3>
+<p>Weakness, fatigue, body pain, stress, headache.</p>
+
+<h3>Recommended Diet</h3>
+<p>Healthy vegetables, fruits, proteins and hydration.</p>
+`;
+
+document.getElementById('dietResult').innerHTML=result;
+
+}
+
+function editMedicineDetails(){
+
+const medicine=document.getElementById('editMedicine').value;
+
+const dosage=document.getElementById('editDosage').value;
+
+document.getElementById('editResult').innerHTML=
+`Medicine updated to ${medicine} with dosage ${dosage}`;
+
+}
+
+function checkMentalHealth(){
+
+const q1=parseInt(document.getElementById('q1').value);
+
+const q2=parseInt(document.getElementById('q2').value);
+
+const q3=parseInt(document.getElementById('q3').value);
+
+const q4=parseInt(document.getElementById('q4').value);
+
+const score=q1+q2+q3+q4;
+
+let result='';
+
+if(score===0){
+
+result='Your mental health looks stable and healthy.';
+
+}
+
+else if(score<=2){
+
+result='You may have mild stress or anxiety.';
+
+}
+
+else{
+
+result='You may need professional mental health consultation.';
+
+}
+
+document.getElementById('mentalResult').innerHTML=result;
+
+const speech=new SpeechSynthesisUtterance(result);
+
+window.speechSynthesis.speak(speech);
+
+}
+
+function startDoctorChat(){
+
+const doctor=document.getElementById('doctorType').value;
+
+document.getElementById('doctorResponse').innerHTML=
+`Connected to ${doctor} chat successfully`;
+
+alert(`Chat started with ${doctor}`);
+
+}
+
+function startVoiceCall(){
+
+const doctor=document.getElementById('doctorType').value;
+
+alert(`Voice call connected with ${doctor}`);
+
+const speech=new SpeechSynthesisUtterance(
+`Voice call connected with ${doctor}`
+);
+
+window.speechSynthesis.speak(speech);
+
+}
+
+function startVideoCall(){
+
+const doctor=document.getElementById('doctorType').value;
+
+alert(`Video call connected with ${doctor}`);
+
+const speech=new SpeechSynthesisUtterance(
+`Video call connected with ${doctor}`
+);
+
+window.speechSynthesis.speak(speech);
+
+}
+
+async function askAI(){
+
+const message=document.getElementById('userMessage').value;
+
+const chatBox=document.getElementById('chatBox');
+
+chatBox.innerHTML+=`<p><b>You:</b> ${message}</p>`;
+
+try{
+
+const response=await fetch('http://localhost:5000/ask-ai',{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({message})
+
+});
+
+const data=await response.json();
+
+chatBox.innerHTML+=`<p><b>AI:</b> ${data.reply}</p>`;
+
+}
+catch(error){
+
+chatBox.innerHTML+=`<p><b>AI:</b> Server not connected</p>`;
+
+}
+
+chatBox.scrollTop=chatBox.scrollHeight;
+
+}
+
+function startVoice(){
+
+const recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+recognition.lang='en-US';
+
+recognition.onresult=function(event){
+
+const text=event.results[0][0].transcript;
+
+document.getElementById('userMessage').value=text;
+
+};
+
+recognition.start();
+
+}
+
+function medicineVoiceReminder(){
+
+const medicine=localStorage.getItem('medicine');
+
+const time=localStorage.getItem('time');
+
+const current=new Date();
+
+const currentTime=current.toTimeString().slice(0,5);
+
+if(currentTime===time){
+
+const speech=new SpeechSynthesisUtterance(
+`It is time to take your medicine ${medicine}`
+);
+
+window.speechSynthesis.speak(speech);
+
+alert(`Take your medicine: ${medicine}`);
+
+}
+
+}
+
+setInterval(medicineVoiceReminder,60000);
+
+</script>
+
+</body>
+</html>
